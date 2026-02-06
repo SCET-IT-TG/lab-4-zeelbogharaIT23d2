@@ -1,1 +1,42 @@
 
+db = db.getSiblingDB("movieDB");
+
+db.movies.insertMany([
+  { "title": "3 Idiots", "director": "Rajkumar Hirani", "year": 2009, "rating": 8.4, "genres": ["Comedy", "Drama"], "plot": "Two friends start a quest for a lost buddy who was once an optimistic engineering student." },
+  { "title": "Sholay", "director": "Ramesh Sippy", "year": 1975, "rating": 8.1, "genres": ["Action", "Adventure"], "plot": "After his family is murdered by a notorious bandit, a former police officer enlists the services of two outlaws to capture him." },
+  { "title": "Baahubali: The Beginning", "director": "S.S. Rajamouli", "year": 2015, "rating": 8.0, "genres": ["Action", "Drama"], "plot": "In ancient India, an adventurous and daring man becomes involved in a decades-old feud between two warring peoples." },
+  { "title": "Dangal", "director": "Nitesh Tiwari", "year": 2016, "rating": 8.3, "genres": ["Biography", "Sport"], "plot": "Former wrestler Mahavir Singh Phogat and his two wrestler daughters struggle towards glory at the Commonwealth Games." },
+  { "title": "Lagaan", "director": "Ashutosh Gowariker", "year": 2001, "rating": 8.1, "genres": ["Drama", "Sport"], "plot": "The people of a small village in Victorian India stake their future on a game of cricket against their ruthless British rulers." },
+  { "title": "Dilwale Dulhania Le Jayenge", "director": "Aditya Chopra", "year": 1995, "rating": 8.0, "genres": ["Romance", "Drama"], "plot": "When Raj meets Simran in Europe, it isn't love at first sight but when she moves to India for an arranged marriage, love strikes." },
+  { "title": "RRR", "director": "S.S. Rajamouli", "year": 2022, "rating": 7.8, "genres": ["Action", "Drama"], "plot": "A fearless revolutionary and an officer in the British force decide to join forces against the mighty British Empire." },
+  { "title": "Gully Boy", "director": "Zoya Akhtar", "year": 2019, "rating": 7.9, "genres": ["Drama", "Music"], "plot": "A coming-of-age story based on the lives of street rappers in Mumbai." },
+  { "title": "K.G.F: Chapter 1", "director": "Prashanth Neel", "year": 2018, "rating": 8.2, "genres": ["Action", "Crime"], "plot": "In the 1970s, a gangster goes undercover as a slave to assassinate the owner of a notorious gold mine." },
+  { "title": "Swades", "director": "Ashutosh Gowariker", "year": 2004, "rating": 8.1, "genres": ["Drama"], "plot": "A successful Indian scientist returns to an Indian village to take his nanny to America with him and in the process rediscovers his roots." },
+  { "title": "Drishyam", "director": "Nishikant Kamat", "year": 2015, "rating": 8.2, "genres": ["Thriller", "Crime"], "plot": "Desperate measures are taken by a man who tries to save his family from the dark side of the law after they commit an unexpected crime." },
+  { "title": "Zindagi Na Milegi Dobara", "director": "Zoya Akhtar", "year": 2011, "rating": 8.2, "genres": ["Comedy", "Drama"], "plot": "Three friends decide to turn their fantasy vacation into reality after one of their friends gets engaged." },
+  { "title": "Kantaram", "director": "Rishab Shetty", "year": 2022, "rating": 8.3, "genres": ["Action", "Thriller"], "plot": "When greed paves the way for betrayal, scheming, and murder, a young tribal reluctantly dons the traditions of his ancestors to seek justice." },
+  { "title": "Vikram", "director": "Lokesh Kanagaraj", "year": 2022, "rating": 8.3, "genres": ["Action", "Thriller"], "plot": "A special investigator discovers a case of serial killings is not what it seems to be, and leading down this path will end in a war." },
+  { "title": "PK", "director": "Rajkumar Hirani", "year": 2014, "rating": 8.1, "genres": ["Comedy", "Sci-Fi"], "plot": "An alien on Earth loses the only device he can use to communicate with his spaceship. His innocent nature and child-like questions force the country to evaluate the impact of religion on its people." }
+]);
+
+db.movies.find({ rating: { $gt: 8.0 } }).explain("executionStats");
+
+db.movies.createIndex({ rating: 1 });
+db.movies.find({ rating: { $gt: 8.0 } }).explain("executionStats");
+
+db.movies.find().sort({ year: -1 }).explain("executionStats");
+db.movies.createIndex({ year: 1 });
+db.movies.find().sort({ year: -1 }).explain("executionStats");
+
+db.movies.createIndex({ director: 1, year: 1 });
+db.movies.find({ director: "S.S. Rajamouli", year: { $gt: 2018 } }).explain("executionStats");
+
+db.movies.find(
+  { year: { $gt: 2010 } },
+  { _id: 0, year: 1 }
+).explain("executionStats");
+
+db.movies.createIndex({ plot: "text" });
+db.movies.find({ $text: { $search: "cricket gangster" } });
+
+db.movies.getIndexes();
